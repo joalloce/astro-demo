@@ -1,0 +1,33 @@
+---
+import slugify from "slugify";
+
+const response = await fetch("http://localhost:5000/", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      query Query {
+        albums {
+          id
+          user {
+            id
+          }
+          title
+        }
+      }
+    `,
+  }),
+});
+const json = await response.json();
+const { albums } = json.data;
+
+---
+<div>
+  {
+    albums.map((album) => (
+      <p>{album.id}</p>
+      <p>{album.user.id}</p>
+      <a href={`/albums/${slugify(album.title)}`}>{album.title}</a>
+    ))
+  }
+</div>

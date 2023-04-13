@@ -1,0 +1,42 @@
+---
+import slugify from "slugify";
+export async function getStaticPaths() {
+  const response = await fetch("http://localhost:5000/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+      query Query {
+        albums {
+          id
+          user {
+            id
+          }
+          title
+        }
+      }
+    `,
+    }),
+  });
+
+  const json = await response.json();
+  const { albums } = json.data;
+
+  return albums.map((album) => {
+    const { title } = album;
+    return {
+      params: { slug: slugify(title) },
+      props: { album },
+    };
+  });
+}
+const { slug } = Astro.params;
+const { album } = Astro.props;
+---
+
+<div>
+  <p>{slug}</p>
+  <p>{album.id}</p>
+  <p>{album.user.id}</p>
+  <p>{album.title}</p>
+</div>

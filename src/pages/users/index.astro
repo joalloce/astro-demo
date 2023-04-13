@@ -1,0 +1,30 @@
+---
+const response = await fetch("http://localhost:5000/", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      query Query {
+        users {
+          id
+          name
+          username
+        }
+      }
+    `,
+  }),
+});
+const json = await response.json();
+const { users } = json.data;
+
+---
+<div>
+  {
+    users.map((user) => (
+      <p>{user.id}</p>
+      <p>{user.name}</p>
+      <p>{user.username}</p>
+      <a href={`/users/${user.username}`}>{user.username}</a>
+    ))
+  }
+</div>
