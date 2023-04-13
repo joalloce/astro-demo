@@ -1,0 +1,37 @@
+---
+import slugify from "slugify";
+
+const response = await fetch("http://localhost:5000/", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      query Query {
+        comments {
+          id
+          post {
+            id
+          }
+          body
+          email
+          name
+        }
+      }
+    `,
+  }),
+});
+const json = await response.json();
+const { comments } = json.data;
+
+---
+<div>
+  {
+    comments.map((comment) => (
+      <p>{comment.id}</p>
+      <p>{comment.post.id}</p>
+      <p>{comment.body}</p>
+      <p>{comment.email}</p>
+      <a href={`/comments/${slugify(comment.name)}`}>{comment.name}</a>
+    ))
+  }
+</div>
