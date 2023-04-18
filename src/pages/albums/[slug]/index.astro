@@ -8,14 +8,12 @@ export async function getStaticPaths() {
     body: JSON.stringify({
       query: `
       query Query {
-        comments {
+        albums {
           id
-          post {
+          user {
             id
           }
-          body
-          email
-          name
+          title
         }
       }
     `,
@@ -23,25 +21,23 @@ export async function getStaticPaths() {
   });
 
   const json = await response.json();
-  const { comments } = json.data;
+  const { albums } = json.data;
 
-  return comments.map((comment) => {
-    const { name } = comment;
+  return albums.map((album) => {
+    const { title } = album;
     return {
-      params: { slug: slugify(name) },
-      props: { comment },
+      params: { slug: slugify(title) },
+      props: { album },
     };
   });
 }
 const { slug } = Astro.params;
-const { comment } = Astro.props;
+const { album } = Astro.props;
 ---
 
 <div>
   <p>{slug}</p>
-  <p>{comment.id}</p>
-  <p>{comment.post.id}</p>
-  <p>{comment.name}</p>
-  <p>{comment.body}</p>
-  <p>{comment.email}</p>
+  <p>{album.id}</p>
+  <p>{album.user.id}</p>
+  <p>{album.title}</p>
 </div>

@@ -1,5 +1,6 @@
 ---
 import slugify from "slugify";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -9,9 +10,6 @@ export async function getStaticPaths() {
       query Query {
         albums {
           id
-          user {
-            id
-          }
           title
         }
       }
@@ -32,11 +30,40 @@ export async function getStaticPaths() {
 }
 const { slug } = Astro.params;
 const { album } = Astro.props;
+
+const getphotosByAlbumId = async (id) => {
+  const response = await fetch("http://localhost:5000/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+      query Query{
+        photosByAlbumId(albumId: ${id}) {
+          url
+          title
+          id
+        }
+      }
+    `,
+    }),
+  });
+
+  const json = await response.json();
+  return json.data;
+};
+
+const { photosByAlbumId } = await getphotosByAlbumId(album.id);
 ---
 
 <div>
   <p>{slug}</p>
-  <p>{album.id}</p>
-  <p>{album.user.id}</p>
-  <p>{album.title}</p>
+  {
+    photosByAlbumId.map((photo) => (
+      <>
+        <p>{photo.name}</p>
+        <p>{photo.title}</p>
+        <p>{photo.url}</p>
+      </>
+    ))
+  }
 </div>

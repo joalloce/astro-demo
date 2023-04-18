@@ -1,4 +1,6 @@
 ---
+import slugify from "slugify";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -6,13 +8,10 @@ export async function getStaticPaths() {
     body: JSON.stringify({
       query: `
       query Query {
-        users {
+        posts {
           id
-          name
-          username
-          email
-          phone
-          website
+          body
+          title
         }
       }
     `,
@@ -20,31 +19,30 @@ export async function getStaticPaths() {
   });
 
   const json = await response.json();
-  const { users } = json.data;
+  const { posts } = json.data;
 
-  return users.map((user) => {
-    const { username } = user;
-
+  return posts.map((post) => {
+    const { title } = post;
     return {
-      params: { username },
-      props: { user },
+      params: { slug: slugify(title) },
+      props: { post },
     };
   });
 }
-const { username } = Astro.params;
-const { user } = Astro.props;
+const { slug } = Astro.params;
+const { post } = Astro.props;
 
-const getPostsByUserId = async (id) => {
+const getCommentsByPostId = async (id) => {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: `
       query Query{
-        postsByUserId(userId: ${id}) {
-          id
-          title
+        commentsByPostId(postId: ${id}) {
           body
+          name
+          id
         }
       }
     `,
@@ -55,16 +53,16 @@ const getPostsByUserId = async (id) => {
   return json.data;
 };
 
-const { postsByUserId } = await getPostsByUserId(user.id);
+const { commentsByPostId } = await getCommentsByPostId(post.id);
 ---
 
 <div>
-  <p>{username}</p>
+  <p>{slug}</p>
   {
-    postsByUserId.map((post) => (
+    commentsByPostId.map((comment) => (
       <>
-        <p>{post.title}</p>
-        <p />
+        <p>{comment.name}</p>
+        <p>{comment.body}</p>
       </>
     ))
   }

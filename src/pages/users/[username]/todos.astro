@@ -1,0 +1,70 @@
+---
+export async function getStaticPaths() {
+  const response = await fetch("http://localhost:5000/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+      query Query {
+        users {
+          id
+          name
+          username
+          email
+          phone
+          website
+        }
+      }
+    `,
+    }),
+  });
+
+  const json = await response.json();
+  const { users } = json.data;
+
+  return users.map((user) => {
+    const { username } = user;
+
+    return {
+      params: { username },
+      props: { user },
+    };
+  });
+}
+const { username } = Astro.params;
+const { user } = Astro.props;
+
+const getTodosByUserId = async (id) => {
+  const response = await fetch("http://localhost:5000/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+      query Query{
+        todosByUserId(userId: ${id}) {
+          id
+          title
+          completed
+        }
+      }
+    `,
+    }),
+  });
+
+  const json = await response.json();
+  return json.data;
+};
+
+const { todosByUserId } = await getTodosByUserId(user.id);
+---
+
+<div>
+  <p>{username}</p>
+  {
+    todosByUserId.map((todo) => (
+      <>
+        <p>{todo.title}</p>
+      </>
+    ))
+  }
+</div>
