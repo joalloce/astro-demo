@@ -1,6 +1,10 @@
 ---
 import slugify from "slugify";
 
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const pageTitle = "Post comment";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -56,7 +60,7 @@ const getCommentsByPostId = async (id) => {
 const { commentsByPostId } = await getCommentsByPostId(post.id);
 ---
 
-<div>
+<BaseLayout pageTitle={pageTitle}>
   <p>{slug}</p>
   {
     commentsByPostId.map((comment) => (
@@ -66,4 +70,4 @@ const { commentsByPostId } = await getCommentsByPostId(post.id);
       </>
     ))
   }
-</div>
+</BaseLayout>

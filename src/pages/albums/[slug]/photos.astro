@@ -1,6 +1,10 @@
 ---
 import slugify from "slugify";
 
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const pageTitle = "Album photos";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -55,7 +59,7 @@ const getphotosByAlbumId = async (id) => {
 const { photosByAlbumId } = await getphotosByAlbumId(album.id);
 ---
 
-<div>
+<BaseLayout pageTitle={pageTitle}>
   <p>{slug}</p>
   {
     photosByAlbumId.map((photo) => (
@@ -66,4 +70,4 @@ const { photosByAlbumId } = await getphotosByAlbumId(album.id);
       </>
     ))
   }
-</div>
+</BaseLayout>
