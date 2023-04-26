@@ -1,4 +1,8 @@
 ---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Users";
+
 const response = await fetch("http://localhost:5000/", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -18,7 +22,7 @@ const json = await response.json();
 const { users } = json.data;
 
 ---
-<div>
+<BaseLayout pageTitle={pageTitle}>
   {
     users.map((user) => (
       <p>{user.id}</p>
@@ -27,4 +31,4 @@ const { users } = json.data;
       <a href={`/users/${user.username}`}>{user.username}</a>
     ))
   }
-</div>
+</BaseLayout>
