@@ -1,8 +1,16 @@
 ---
+import Resource from "../components/Resource.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 const pageTitle = "Home Page";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <h2>Astro demo</h2>
+  <h3>Resources</h3>
+  <Resource resource="users" />
+  <Resource resource="posts" />
+  <Resource resource="comments" />
+  <Resource resource="albums" />
+  <Resource resource="photos" />
+  <Resource resource="todos" />
 </BaseLayout>

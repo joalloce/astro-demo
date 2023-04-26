@@ -1,4 +1,8 @@
 ---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const pageTitle = "User";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -35,8 +39,8 @@ const { username } = Astro.params;
 const { user } = Astro.props;
 ---
 
-<div>
+<BaseLayout pageTitle={pageTitle}>
   <p>{username}</p>
   <p>{user.name}</p>
   <p>{user.email}</p>
-</div>
+</BaseLayout>

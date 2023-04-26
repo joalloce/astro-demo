@@ -1,6 +1,10 @@
 ---
 import slugify from "slugify";
 
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Photos";
+
 const response = await fetch("http://localhost:5000/", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -24,7 +28,7 @@ const json = await response.json();
 const { photos } = json.data;
 
 ---
-<div>
+<BaseLayout pageTitle={pageTitle}>
   {
     photos.map((photo) => (
       <p>{photo.id}</p>
@@ -35,4 +39,4 @@ const { photos } = json.data;
       <a href={`/photos/${slugify(photo.title)}`}>{photo.title}</a>
     ))
   }
-</div>
+</BaseLayout>
