@@ -1,6 +1,10 @@
 ---
 import slugify from "slugify";
 
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Comments";
+
 const response = await fetch("http://localhost:5000/", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -24,7 +28,7 @@ const json = await response.json();
 const { comments } = json.data;
 
 ---
-<div>
+<BaseLayout pageTitle={pageTitle}>
   {
     comments.map((comment) => (
       <p>{comment.id}</p>
@@ -34,4 +38,4 @@ const { comments } = json.data;
       <a href={`/comments/${slugify(comment.name)}`}>{comment.name}</a>
     ))
   }
-</div>
+</BaseLayout>

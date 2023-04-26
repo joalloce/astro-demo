@@ -1,4 +1,8 @@
 ---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const pageTitle = "User albums";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -57,7 +61,7 @@ const getAlbumsByUserId = async (id) => {
 const { albumsByUserId } = await getAlbumsByUserId(user.id);
 ---
 
-<div>
+<BaseLayout pageTitle={pageTitle}>
   <p>{username}</p>
   {
     albumsByUserId.map((album) => (
@@ -66,4 +70,4 @@ const { albumsByUserId } = await getAlbumsByUserId(user.id);
       </>
     ))
   }
-</div>
+</BaseLayout>

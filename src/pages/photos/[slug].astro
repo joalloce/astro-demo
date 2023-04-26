@@ -1,5 +1,10 @@
 ---
 import slugify from "slugify";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Photo";
+
 export async function getStaticPaths() {
   const response = await fetch("http://localhost:5000/", {
     method: "POST",
@@ -36,11 +41,11 @@ const { slug } = Astro.params;
 const { photo } = Astro.props;
 ---
 
-<div>
+<BaseLayout pageTitle={pageTitle}>
   <p>{slug}</p>
   <p>{photo.id}</p>
   <p>{photo.album.id}</p>
   <p>{photo.thumbnailUrl}</p>
   <p>{photo.title}</p>
   <p>{photo.url}</p>
-</div>
+</BaseLayout>
